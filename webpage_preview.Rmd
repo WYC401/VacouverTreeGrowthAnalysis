@@ -1,0 +1,42 @@
+---
+title: "mini-data analysis_1"
+author: "Yicheng Wang"
+date: "10/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Mini Data Analysis
+
+## Choose datasets 
+There are 7 datasets in the datateachr package. Let's first import the two packages,datateachr and tidyverse, needed for analysis.
+```{r}
+library(datateachr)
+library(tidyverse)
+```
+Before finally choose 4 datasets out of 7, the first 6 rows of each dataset is printed.
+```{r}
+print(head(apt_buildings))
+print(head(building_permits))
+print(head(cancer_sample))
+print(head(flow_sample))
+print(head(parking_meters))
+print(head(steam_games))
+print(head(vancouver_trees))
+```
+After seeing the head of dataset, my final decisions are:
+*parking_meters
+*steam_games
++
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
