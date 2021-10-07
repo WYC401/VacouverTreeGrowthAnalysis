@@ -2,7 +2,7 @@
 title: "mini-data analysis_1"
 author: "Yicheng Wang"
 date: "10/5/2021"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -30,7 +30,23 @@ print(head(vancouver_trees))
 After seeing the head of dataset, my final decisions are:
 *parking_meters
 *steam_games
-+
+*cancer_sample
+*vancouver_trees
+
+Let's narrow down the choice. To do this, we need to do some exploration about the four datasets. We consider to print number of rows and columns, number of numerical columns and 
+```{r}
+#write a loop to show attributes of parking_meters
+a=list(vancouver_trees,parking_meters,steam_games,cancer_sample)
+for (val in a)
+{
+  #cat(as.character(val),"\n")
+  cat("The number of rows ",nrow(val),"\n")
+  cat("The number of columns ",ncol(val),"\n")
+  cat("The number of numeric columns",length(select_if(val,is.numeric)),"\n\n") #calculate the 
+}
+
+```
+I choose the dataset vancouver_trees
 ## Including Plots
 
 You can also embed plots, for example:
