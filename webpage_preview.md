@@ -5,7 +5,7 @@ Yicheng Wang
 
 # Mini Data Analysis
 
-## Choose datasets
+## 1. Choose Datasets
 
 There are 7 datasets in the datateachr package. Let’s first import the
 two packages,datateachr and tidyverse, needed for analysis.
@@ -175,27 +175,84 @@ for (val in a)
   #cat(as.character(val),"\n")
   cat("The number of rows ",nrow(val),"\n")
   cat("The number of columns ",ncol(val),"\n")
-  cat("The number of numeric columns",length(select_if(val,is.numeric)),"\n\n") #calculate the 
+  cat("The class of the object",class(val),"\n")
+  cat("The number of numeric columns",length(select_if(val,is.numeric)),"\n\n") #calculate the number of numeric columns 
 }
 ```
 
     ## The number of rows  146611 
     ## The number of columns  20 
+    ## The class of the object tbl_df tbl data.frame 
     ## The number of numeric columns 7 
     ## 
     ## The number of rows  10032 
     ## The number of columns  22 
+    ## The class of the object tbl_df tbl data.frame 
     ## The number of numeric columns 2 
     ## 
     ## The number of rows  40833 
     ## The number of columns  21 
+    ## The class of the object spec_tbl_df tbl_df tbl data.frame 
     ## The number of numeric columns 4 
     ## 
     ## The number of rows  569 
     ## The number of columns  32 
+    ## The class of the object spec_tbl_df tbl_df tbl data.frame 
     ## The number of numeric columns 31
 
-I choose the dataset vancouver\_trees \#\# Including Plots
+I choose the dataset vancouver\_trees and steam\_games because it has a
+relatively appropriate number of numeric columns. It is easier to do the
+data analysis on dataframe with more numeric columns. But too many
+numeric columns make me lost in numbers. So, I prefer the dataset with
+medium number of numeric columns.
+
+*For the dataset vancouver\_trees, I am interested in the problem
+whether different kinds of trees are equally distributed among the
+Vancouver and whether specific category of trees will concentrate on
+some area. *For the dataset steam\_games, I am interested in the
+relationship between the number of languages the game support and its
+price. After mininutes of thinking, I think the first research problem
+more attractive to me. So, I decided to choose the dataset
+vancouver\_trees.
+
+## 2.Exploring Dataset
+
+First, let’s draw a histogram of numeric variable diameter. As we can
+see the picture, the diameter of trees concentrates on 10.
+
+``` r
+plot_1 <- ggplot(vancouver_trees, aes(x = diameter)) + 
+    geom_histogram(bins=50)
+print(plot_1)
+```
+
+![](webpage_preview_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+Second, I wan to narrow my search down to trees of Americana species.
+
+``` r
+filter(vancouver_trees,species_name=="AMERICANA")
+```
+
+    ## # A tibble: 5,515 x 20
+    ##    tree_id civic_number std_street genus_name species_name cultivar_name  
+    ##      <dbl>        <dbl> <chr>      <chr>      <chr>        <chr>          
+    ##  1  149556          494 W 58TH AV  ULMUS      AMERICANA    BRANDON        
+    ##  2  149590          858 E 39TH AV  FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  3  149625          720 E 39TH AV  FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  4  155413         2485 W BROADWAY ULMUS      AMERICANA    BRANDON        
+    ##  5  155555          779 E 39TH AV  FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  6  155638         4289 WINDSOR ST FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  7  155660         5623 ONTARIO ST FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  8  155661         5655 ONTARIO ST FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  9  155863         4805 ARGYLE ST  FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ## 10  155865         4805 ARGYLE ST  FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ## # ... with 5,505 more rows, and 14 more variables: common_name <chr>,
+    ## #   assigned <chr>, root_barrier <chr>, plant_area <chr>,
+    ## #   on_street_block <dbl>, on_street <chr>, neighbourhood_name <chr>,
+    ## #   street_side_name <chr>, height_range_id <dbl>, diameter <dbl>, curb <chr>,
+    ## #   date_planted <date>, longitude <dbl>, latitude <dbl>
+
+## Including Plots
 
 You can also embed plots, for example:
 

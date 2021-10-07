@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Mini Data Analysis
 
-## Choose datasets 
+## 1. Choose Datasets 
 There are 7 datasets in the datateachr package. Let's first import the two packages,datateachr and tidyverse, needed for analysis.
 ```{r}
 library(datateachr)
@@ -42,11 +42,49 @@ for (val in a)
   #cat(as.character(val),"\n")
   cat("The number of rows ",nrow(val),"\n")
   cat("The number of columns ",ncol(val),"\n")
-  cat("The number of numeric columns",length(select_if(val,is.numeric)),"\n\n") #calculate the 
+  cat("The class of the object",class(val),"\n")
+  cat("The number of numeric columns",length(select_if(val,is.numeric)),"\n\n") #calculate the number of numeric columns 
 }
 
 ```
-I choose the dataset vancouver_trees
+I choose the dataset vancouver_trees and steam_games because it has a relatively appropriate number of numeric columns. It is easier to do the data analysis on dataframe with more numeric columns. But too many numeric columns make me lost in numbers. So, I prefer the dataset with medium number of numeric columns.   
+
+*For the dataset vancouver_trees, I am interested in the problem whether different kinds of trees are equally distributed among the Vancouver and whether specific category of trees will concentrate on some area. 
+*For the dataset steam_games, I am interested in the relationship between the number of languages the game support and its price.
+After mininutes of thinking, I think the first research problem more attractive to me. So, I decided to choose the dataset vancouver_trees.
+
+## 2.Exploring Dataset
+First, let's draw a histogram of numeric variable diameter. As we can see the picture, the diameter of trees concentrates on 10. 
+```{r}
+plot_1 <- ggplot(vancouver_trees, aes(x = diameter)) + 
+    geom_histogram(bins=50)
+print(plot_1)
+```
+
+Second, I wan to narrow my search down to trees of Americana species. 
+```{r}
+filter(vancouver_trees,species_name=="AMERICANA")
+```
+Third, we want to explore the relationship between diameter and latitude. The picture shows that the diameter of trees seem to distribute equally under the different lantitude. 
+```{r}
+ggplot(vancouver_trees)+geom_point(aes(x=diameter,y=latitude,alpha = 0.001))
+```
+```{r}
+new_tribble<- vancouver_trees
+            % select(-) 
+
+```
+
+First, drawing a histogram is to see how diameter of trees distribute.If the histogram has more than one peak, that may be caused by some latent categories of tree data. 
+Second, searching for the trees of Americana species can help us understand if different species trees have some specific traits like specific mean of diameter.
+Third, the scatterplot of diameter and latitude can show us the relationship of the two variables. For example, linear relationship between diameter and latitude lead us to thinking about the geographical factors may affect trees' growth.
+
+## 3. Research Problems
+1. Are the parameters of the tree like diameter  equally distributed among different species?
+2. Will some species of trees concentrate on some places? Or are the trees equally distributed among the map?
+3. What is the relationship between the age of trees and their diameter or other parameter?
+4  What is effect of root barrier on the growth of trees(their diameter)?
+
 ## Including Plots
 
 You can also embed plots, for example:
