@@ -160,12 +160,19 @@ print(head(vancouver_trees))
     ## #   height_range_id <dbl>, diameter <dbl>, curb <chr>, date_planted <date>,
     ## #   longitude <dbl>, latitude <dbl>
 
-After seeing the head of dataset, my final decisions are:
-*parking\_meters *steam\_games *cancer\_sample *vancouver\_trees
+### 1.1 Choose 4 Out of 7
+
+After seeing the head of dataset, my final decisions are:  
+1. parking\_meters  
+2. steam\_games  
+3. cancer\_sample  
+4. vancouver\_trees
+
+### 1.2 Exploring Dataset
 
 Let’s narrow down the choice. To do this, we need to do some exploration
 about the four datasets. We consider to print number of rows and
-columns, number of numerical columns and
+columns, number of numerical columns and class of the variable.
 
 ``` r
 #write a loop to show attributes of parking_meters
@@ -200,22 +207,29 @@ for (val in a)
     ## The class of the object spec_tbl_df tbl_df tbl data.frame 
     ## The number of numeric columns 31
 
+### 1.3 Narrowing Down To 2
+
 I choose the dataset vancouver\_trees and steam\_games because it has a
 relatively appropriate number of numeric columns. It is easier to do the
 data analysis on dataframe with more numeric columns. But too many
 numeric columns make me lost in numbers. So, I prefer the dataset with
 medium number of numeric columns.
 
-*For the dataset vancouver\_trees, I am interested in the problem
-whether different kinds of trees are equally distributed among the
-Vancouver and whether specific category of trees will concentrate on
-some area. *For the dataset steam\_games, I am interested in the
-relationship between the number of languages the game support and its
-price. After mininutes of thinking, I think the first research problem
-more attractive to me. So, I decided to choose the dataset
-vancouver\_trees.
+### 1.4 Final Decision
 
-## 2.Exploring Dataset
+-   For the dataset vancouver\_trees, I am interested in the problem
+    whether different kinds of trees are equally distributed among the
+    Vancouver and whether specific category of trees will concentrate on
+    some area.
+-   For the dataset steam\_games, I am interested in the relationship
+    between the number of languages the game support and its price.
+
+After mininutes of thinking, the first research problem is more
+attractive to me. So, I decided to choose the dataset vancouver\_trees.
+
+## 2.Exploring Dataset of Interest
+
+### 2.1 Plotting and Extracting
 
 First, let’s draw a histogram of numeric variable diameter. As we can
 see the picture, the diameter of trees concentrates on 10.
@@ -227,6 +241,7 @@ print(plot_1)
 ```
 
 ![](webpage_preview_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
 Second, I wan to narrow my search down to trees of Americana species.
 
 ``` r
@@ -252,11 +267,52 @@ filter(vancouver_trees,species_name=="AMERICANA")
     ## #   street_side_name <chr>, height_range_id <dbl>, diameter <dbl>, curb <chr>,
     ## #   date_planted <date>, longitude <dbl>, latitude <dbl>
 
-## Including Plots
+Third, we want to explore the relationship between diameter and
+latitude. The picture shows that the diameter of trees seem to
+distribute equally under the different lantitude.
 
-You can also embed plots, for example:
+``` r
+ggplot(vancouver_trees)+geom_point(aes(x=diameter,y=latitude,alpha = 0.001))
+```
 
-![](webpage_preview_files/figure-gfm/pressure-1.png)<!-- -->
+    ## Warning: Removed 22771 rows containing missing values (geom_point).
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+![](webpage_preview_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Forth. a boxplot is drawn to see if there is difference between diameter
+distribution of those with tree barriers and those without. As we see,
+the trees with barriers tend to have less diameter in term of the mean.
+
+``` r
+#there are too many outliers with diameter exceeding 80. To make the box part clearer, I set the limitation of y axis to 50 instead of 100 as default.
+ggplot(vancouver_trees,aes(x=root_barrier,y=diameter))+geom_boxplot(width=0.3)+ coord_cartesian( ylim = c(0, 40))
+```
+
+![](webpage_preview_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+### 2.2 Explanations for Plotting and Data Transformation Above
+
+First, drawing a histogram is to see how diameter of trees distribute.If
+the histogram has more than one peak, that may be caused by some latent
+categories of tree data.  
+Second, searching for the trees of Americana species can help us
+understand if different species trees have some specific traits like
+specific mean of diameter.  
+Third, the scatterplot of diameter and latitude can show us the
+relationship of the two variables. For example, linear relationship
+between diameter and latitude lead us to thinking about the geographical
+factors may affect trees’ growth.  
+Last, the boxplot of diameter is plotted to see if the trees with
+barriers have bigger or smaller size. It is common sense that tree
+barrier will inhibit trees’ growth.
+
+## 3. Research Problems
+
+1.  Are the parameters of the tree like diameter equally distributed
+    among different species?
+2.  Will some species of trees concentrate on some places? Or are the
+    trees equally distributed among the map?
+3.  What is the relationship between the age of trees and their diameter
+    or other parameter?
+4.  What is effect of root barrier on the growth of trees(their
+    diameter)?
