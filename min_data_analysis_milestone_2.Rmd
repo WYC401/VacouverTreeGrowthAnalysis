@@ -1,0 +1,35 @@
+---
+title: "mini_data_analysis_milestone_2"
+author: "Yicheng Wang"
+date: "10/11/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Mini Data Analysis Milestone 2
+Before all, we need to load the two packages needed, where the dataset of interest vancouver_trees is in. And we will print the first 6 rows of the data for the manipulation and plotting latter.
+```{r}
+library(datateachr) # <- might contain the data you picked!
+library(tidyverse)
+print(head(vancouver_trees))
+```
+## 1. Process and Summarize data 
+### 1.1 Review of 4 Research Problems
+
+1. Are the parameters of the tree like diameter equally distributed among different species?
+2. Will some species of trees concentrate on some places? Or are the trees equally distributed among the map?
+3. What is the relationship between the age of trees and their diameter or other parameter?
+4. What is effect of root barrier on the growth of trees(their diameter)?  
+
+### 1.2 Graph and Summarize 
+
+For the 1st problem, the first thing comes to my mind is that we can take a look at how many data points falls into each species. It is important to know about this because some minority species with one or two record may not have much value to study on it. We want to focus on the serveral majority species.
+```{r}
+vancouver_trees%>%
+  group_by(species_name)%>%
+  summarise(number_of_records=n())%>%
+  arrange(desc(number_of_records))
+```
