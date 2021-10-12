@@ -28,8 +28,18 @@ print(head(vancouver_trees))
 
 For the 1st problem, the first thing comes to my mind is that we can take a look at how many data points falls into each species. It is important to know about this because some minority species with one or two record may not have much value to study on it. We want to focus on the serveral majority species.
 ```{r}
-vancouver_trees%>%
+
+subset_1 <- vancouver_trees%>%
   group_by(species_name)%>%
   summarise(number_of_records=n())%>%
   arrange(desc(number_of_records))
+
+print(subset_1[1:10,])
+```
+
+Next, we center our focus on the top 10 species. To better see the difference between diameter distribution among species, let's draw the density graphs of the 10 species.   
+```{r}
+
+  filter( vancouver_trees, species_name %in% subset_1$species_name) %>% group_by()
+
 ```
