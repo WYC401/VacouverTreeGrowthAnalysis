@@ -20,7 +20,7 @@ print(head(vancouver_trees))
 ### 1.1 Review of 4 Research Problems
 
 1. Are the parameters of the tree like diameter equally distributed among different species?
-2. Will some species of trees concentrate on some places? Or are the trees equally distributed among the map?
+2. Do some species of trees concentrate on some places? Or are the trees equally distributed among the map?
 3. What is the relationship between the age of trees and their diameter or other parameter?
 4. What is effect of root barrier on the growth of trees(their diameter)?  
 
@@ -37,9 +37,26 @@ subset_1 <- vancouver_trees%>%
 print(subset_1[1:10,])
 ```
 
-Next, we center our focus on the top 10 species. To better see the difference between diameter distribution among species, let's draw the density graphs of the 10 species.   
+Next, we center our focus on the top 10 species. To better see the difference between diameter distribution among species, let's draw the density graphs of the 10 species. 
+```{r}
+  subset_1=subset_1[1:10,]
+  print(subset_1)
+  plot_1=filter( vancouver_trees, species_name %in% subset_1$species_name) %>% 
+  ggplot(aes(diameter,species_name)) +
+  ggridges::geom_density_ridges()
+  print(plot_1)
+
+```
+
+For the second research problem, we first find the medians of both the latitude and the latitude of trees. And we divide the area trees stand into 4 regions according to the medians of the latitudes and the latitudes: West North, East North, West South and East South. 
 ```{r}
 
-  filter( vancouver_trees, species_name %in% subset_1$species_name) %>% group_by()
+  med_position<-apply(na.omit(vancouver_trees[,c("longitude","latitude")]),2,median)
+  gapminder_1997 <- vancouver_trees %>% 
+   mutate(position = case_when( longitude< med_position[1]  ~ "very low", # any logical statement 
+                                  lifeExp< 48 ~ "low",
+                                lifeExp < 59 ~ "moderate",
+                                 lifeExp < 70 ~ "high",
+                                 TRUE ~ "very high"))
 
 ```
