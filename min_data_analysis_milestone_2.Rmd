@@ -66,12 +66,12 @@ For the second research problem, we first find the medians of both the latitude 
   
 ```
 
-Then, we do the plottings.
+Then, we plot the mean of the trees' diameter among each region. It seems that the trees in the West North region tend to be higher than those in the other 3 regions.
 
 ```{r}
   ggplot(summary,aes(position,mean))+
     geom_col()+
-    geom_line(aes(mean))
+    geom_text(aes(label=mean),position=position_dodge(0.9),vjust=0)
 
 ```
 
