@@ -49,7 +49,7 @@ Next, we center our focus on the top 10 species. To better see the difference be
 
 ```
 
-For the second research problem, we first find the medians of both the latitude and the latitude of trees. And we divide the area trees stand into 4 regions according to the medians of the latitudes and the latitudes: West North, East North, West South and East South. 
+For the second research problem, we first find the medians of both the latitude and the latitude of trees. And we divide the area trees stand into 4 regions according to the medians of the latitudes and the latitudes: West North, East North, West South and East South. Then, we caculate the summary statistics of `height_range_id` among different regions/positions.
 ```{r}
 
   med_position<-apply(na.omit(vancouver_trees[,c("longitude","latitude")]),2,median)
@@ -66,11 +66,25 @@ For the second research problem, we first find the medians of both the latitude 
   
 ```
 
-
+Then, we do the plottings.
 
 ```{r}
   ggplot(summary,aes(position,mean))+
     geom_col()+
     geom_line(aes(mean))
 
+```
+
+For the third research problem, the age of trees should be calculated first to form a new column.Since the variable `heights_range_id` take the level 1-10 to indicate the height of the trees, we can use it as categorical variables to
+see if summarized statistics of ages like mean and median are different among trees of different height level. So, we create a table to compute the median,range, mean and standard deviation of ages(by months) among different height levels.
+```{r}
+  vancouver_trees <- table_with_position
+  #create a new column caculating the ages of trees in months
+  vancouver_trees$age_months=as.numeric(difftime(Sys.Date(),vancouver_trees$date_planted,units="days")/12)
+  vancouver_trees%>%
+    group_by(height_range_id)%>%
+    summarise(age_mean_months=mean(age_months,na.rm=TRUE),age_range_months=max(age_months,na.rm=TRUE)-min(age_months,na.rm=TRUE),age_median_months=median(age_months,na.rm=TRUE), age_std_months=sd(age_months,na.rm=TRUE))
+  
+    
+  
 ```
