@@ -84,7 +84,24 @@ see if summarized statistics of ages like mean and median are different among tr
   vancouver_trees%>%
     group_by(height_range_id)%>%
     summarise(age_mean_months=mean(age_months,na.rm=TRUE),age_range_months=max(age_months,na.rm=TRUE)-min(age_months,na.rm=TRUE),age_median_months=median(age_months,na.rm=TRUE), age_std_months=sd(age_months,na.rm=TRUE))
-  
-    
-  
+```
+
+Next, let's plot the relationship between trees' age and their diameters. Since the points will expand too much on the x-axis, log scale on x-axis is adopted.  
+```{r}
+  ggplot(vancouver_trees, aes(age_months,diameter))+
+           geom_point(size=0.8, alpha =1)+
+           scale_x_log10()
+```
+
+For the forth research problem, we consider to compute the  the median,range, mean and standard deviation of diameters among trees with and without root barriers. The two group shows great difference in the mean and median. 
+```{r}
+  table_summary<-group_by(vancouver_trees, root_barrier ) %>%
+    do(describe(.$diameter))
+  print(table_summary)
+```
+Then, two density plots are drawn in the same graph by setting the transparency parameter `alpha`.It seems that the distribution of trees with root barrier has a sharp spike while trees without root barrier distributed more equally. 
+```{r}
+  ggplot(vancouver_trees, aes(x = diameter)) + 
+    geom_density(aes(fill = root_barrier), alpha=0.3 )+
+    xlim(0, 25)
 ```
