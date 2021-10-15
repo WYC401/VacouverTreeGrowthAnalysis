@@ -14,6 +14,7 @@ Before all, we need to load the two packages needed, where the dataset of intere
 ```{r}
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
+library(psych)
 print(head(vancouver_trees))
 ```
 ## 1. Process and Summarize data 
@@ -52,11 +53,24 @@ For the second research problem, we first find the medians of both the latitude 
 ```{r}
 
   med_position<-apply(na.omit(vancouver_trees[,c("longitude","latitude")]),2,median)
-  gapminder_1997 <- vancouver_trees %>% 
-   mutate(position = case_when( longitude< med_position[1]  ~ "very low", # any logical statement 
-                                  lifeExp< 48 ~ "low",
-                                lifeExp < 59 ~ "moderate",
-                                 lifeExp < 70 ~ "high",
-                                 TRUE ~ "very high"))
+  table_with_position <-vancouver_trees %>% 
+     mutate(position = case_when( (longitude< med_position[1]) & (latitude<med_position[2])  ~ "West South",  
+                                  (longitude< med_position[1]) & (latitude>=med_position[2])  ~ "West North",
+                                (longitude>= med_position[1]) & (latitude<med_position[2])  ~ "East South",
+                                 TRUE ~ "East North"))
+  summary=table_with_position%>%
+            group_by(position)%>%
+            do(describe(.$height_range_id))
+  print(summary)
+
+  
+```
+
+
+
+```{r}
+  ggplot(summary,aes(position,mean))+
+    geom_col()+
+    geom_line(aes(mean))
 
 ```

@@ -96,7 +96,7 @@ ggplot(vancouver_trees,aes(x=root_barrier,y=diameter))+geom_boxplot(width=0.3)+ 
   Last, the boxplot of diameter is plotted to see if the trees with barriers have bigger or smaller size. It is common sense that tree barrier will inhibit trees' growth.
 
 ## 3. Research Problems
-1. Are the parameters of the tree like diameter  equally distributed among different species?
+1. Are the parameters of the tree like diameter equally distributed among different species?
 2. Will some species of trees concentrate on some places? Or are the trees equally distributed among the map?
 3. What is the relationship between the age of trees and their diameter or other parameter?
 4. What is effect of root barrier on the growth of trees(their diameter)?
