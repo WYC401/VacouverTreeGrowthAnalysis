@@ -195,15 +195,15 @@ of ages(by months) among different height levels.
     ## # A tibble: 11 x 5
     ##    height_range_id age_mean_months age_range_months age_median_months
     ##              <dbl>           <dbl>            <dbl>             <dbl>
-    ##  1               0            386.             888.              353 
-    ##  2               1            371.             901.              358.
+    ##  1               0            386.             888.              353.
+    ##  2               1            372.             901.              358.
     ##  3               2            678.             900.              697.
-    ##  4               3            714.             891.              723.
-    ##  5               4            744.             897.              754.
+    ##  4               3            715.             891.              724.
+    ##  5               4            744.             897.              754 
     ##  6               5            758.             880.              761.
     ##  7               6            712.             863.              723.
     ##  8               7            652.             629.              654.
-    ##  9               8            615.             415.              617.
+    ##  9               8            616.             415.              618.
     ## 10               9            626.             310.              648.
     ## 11              10            724.               0               724.
     ## # ... with 1 more variable: age_std_months <dbl>
@@ -255,3 +255,34 @@ distributed more equally.
     ## Warning: Removed 13438 rows containing non-finite values (stat_density).
 
 ![](min_data_analysis_milestone_2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+#### Summary
+
+1.  The answer to the first research problem can be clearly seen from
+    the graph: Top 10 trees species have different distribution in their
+    diameters. But “distributed differently or not” is just a very
+    general question. Maybe we can refine the origin question to “Is
+    there any way to distinct the species by using the diameter and
+    other parameter?”.  
+2.  The second question has not been answered very clearly because our
+    partition of the whole vancouver region is very rough. I think this
+    question can be kept doing further research with the refined way to
+    show trees’ position in the graph.  
+3.  The scatterplot shed some light on the Question 3. Basically, we can
+    say the trees’ diameters increase with their ages. We can go further
+    by chaging the question 3 to “Do the ages and diameters of trees
+    have linear relationship?”.  
+4.  For the 4th research problem, the density plot shows the difference
+    between the tree diameter with root barriers and without. It is
+    clear that the diameter of trees with barrier tend to center on 3.
+    And the trees without barrier have more freedom in their diameters
+    with a much higer mean–10. They can grow wildly. Still, we will ask
+    further about if it is possible to tell apart the trees with and
+    without root barriers by using their diameter data.
+
+## Tidy data
+
+### 2.1
+
+I think the data is tidy because each row is an observation, each column
+is a variable and each cell is a value. \#\#\# 2.2 Untidy and then tidy

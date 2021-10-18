@@ -83,7 +83,10 @@ see if summarized statistics of ages like mean and median are different among tr
   vancouver_trees$age_months=as.numeric(difftime(Sys.Date(),vancouver_trees$date_planted,units="days")/12)
   vancouver_trees%>%
     group_by(height_range_id)%>%
-    summarise(age_mean_months=mean(age_months,na.rm=TRUE),age_range_months=max(age_months,na.rm=TRUE)-min(age_months,na.rm=TRUE),age_median_months=median(age_months,na.rm=TRUE), age_std_months=sd(age_months,na.rm=TRUE))
+    summarise(age_mean_months=mean(age_months,na.rm=TRUE),
+              age_range_months=max(age_months,na.rm=TRUE)-min(age_months,na.rm=TRUE),
+              age_median_months=median(age_months,na.rm=TRUE),
+              age_std_months=sd(age_months,na.rm=TRUE))
 ```
 
 Next, let's plot the relationship between trees' age and their diameters. Since the points will expand too much on the x-axis, log scale on x-axis is adopted.  
@@ -99,9 +102,28 @@ For the forth research problem, we consider to compute the  the median,range, me
     do(describe(.$diameter))
   print(table_summary)
 ```
-Then, two density plots are drawn in the same graph by setting the transparency parameter `alpha`.It seems that the distribution of trees with root barrier has a sharp spike while trees without root barrier distributed more equally. 
+Then, two density plots are drawn in the same graph by setting the transparency parameter `alpha`.It seems that the distribution of trees with root barrier has a sharp spike while trees without root barrier distributed more equally.
 ```{r}
   ggplot(vancouver_trees, aes(x = diameter)) + 
     geom_density(aes(fill = root_barrier), alpha=0.3 )+
     xlim(0, 25)
+```
+
+#### Summary  
+1. The answer to the first research problem can be clearly seen from the graph: Top 10 trees species have different distribution in their diameters. But "distributed differently or not" is just a very general question. Maybe we can refine the origin question to "Is there any way to distinct the species by using the diameter and other parameter?".  
+2. The second question has not been answered very clearly because our partition of the whole vancouver region is  very rough. I think this question can be kept doing further research with the refined way to show trees' position in the graph.   
+3. The scatterplot shed some light on the Question 3. Basically, we can say the trees' diameters increase with their ages. We can go further by chaging the question 3 to "Do the ages and diameters of trees have linear relationship?".  
+4. For the 4th research problem, the density plot shows the difference between the tree diameter with root barriers and without. It is clear that the diameter of trees with barrier tend to center on 3. And the trees without barrier have more freedom in their diameters with a much higer mean--10. They can grow wildly. Still, we will ask further about if it is possible to tell apart the trees with and without root barriers by using their diameter data. 
+
+## Tidy data
+### 2.1
+I think the data is tidy because each row is an observation, each column is a variable and each cell is a value. 
+### 2.2 Untidy and then tidy 
+First, untidy the tidy data. since `root_barrier` takes binary values--"Y" and "N", we use it to create the two new columns by taking diameter as their values. Then, each row has two values: one filled with its diameter value and the other taking `NA` according to whether the tree has root barrier or not. For example, trees with root barriers fill "Y" column with their diameters and "N" columns with `NA`. If we want to study the forth problem, i.e, the relationship between root barrier and diameters, each row of the transformed data  is not tidy. So, the data becomes untidy now. 
+```{r}
+  table_untidy <- vancouver_trees %>% 
+                    pivot_wider(id_col=tree_id,
+                                names_from=root_barrier,
+                                values_from=diameter)
+  print(head(table_untidy))
 ```
