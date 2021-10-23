@@ -1,0 +1,63 @@
+---
+title: "mini data analysis 3"
+author: "Yicheng Wang"
+date: "10/23/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Mini Data Analysis- Milestone 3
+Before all, we need to clear all the environment varibales in the console left by the running of milestone 1 and milestone 2 and load the two packages needed, where the dataset of interest `vancouver_trees` is in. And we will print the first 6 rows to have a preview of what the data look like.
+```{r}
+ rm(list=ls()) 
+library(datateachr) # <- might contain the data you picked!
+library(tidyverse)
+library(psych)
+
+print(head(vancouver_trees))
+```
+
+## 1.1 Create New Factors and Time Based Columns
+In the milestone 2, a ridge plot 1 is done to show the different  
+```{r}
+  subset_1 <- vancouver_trees%>%
+  group_by(species_name)%>%
+  summarise(number_of_records=n())%>%
+  arrange(desc(number_of_records))
+  
+  print(subset_1[1:10,])
+  
+  find_peak_point<-function(col){
+    index=which.max(density(col)$y)
+    return (density(col)$x[index])
+  }
+  
+  vancouver_trees_top_10_species<- filter(vancouver_trees,species_name %in% (subset_1[1:10,])$species_name)
+  vancouver_trees_top_10_species$species_name<-as.factor(vancouver_trees_top_10_species$species_name)
+  density_peak_points<-vancouver_trees_top_10_species%>%
+                        group_by(species_name)%>%
+                        group_map(~find_peak_point(.x$diameter))%>%
+                        as.numeric()
+  
+  dataframe_peak_point<-data.frame(levels(vancouver_trees_top_10_species$species_name),density_peak_points)%>%
+                           tibble()%>%
+                           arrange(density_peak_points)
+  
+  
+  ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( vancouver_trees_top_10_species$species_name,dataframe_peak_point[[1]])))+ 
+    ggridges::geom_density_ridges()
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
