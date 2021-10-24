@@ -16,20 +16,34 @@ Before all, we need to clear all the environment varibales in the console left b
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
 library(psych)
-
+library(lubridate)
+library(herein)
 print(head(vancouver_trees))
 ```
 
 ## 1.1 Create New Factors and Time Based Columns
-In the milestone 2, a ridge plot 1 is done to show the different  
+In this part, two tasks are done:  
+* Task 1
+* Task 3
+
+### 1.1.1 Reorder Graph
+In the milestone 2, a ridge plot is done to show the different distributions of trees' diameter among different species. We bring it here again.  
 ```{r}
   subset_1 <- vancouver_trees%>%
   group_by(species_name)%>%
   summarise(number_of_records=n())%>%
   arrange(desc(number_of_records))
+
+
+  plot_1=filter( vancouver_trees, species_name %in% subset_1[1:10,]$species_name) %>% 
+            ggplot(aes(diameter,species_name)) +
+            ggridges::geom_density_ridges()
+  print(plot_1)
+```
+But the order of `species_name` in y-axis does not make the plot very beautiful and clear. So, we consider to reorder it. The species names is arranged in the new plot by their peak points in the density from left to the right.  Choosing the peak points in separate density plots is because the peak point is often the position where most data points concentrate. Moreover, the peak points increasing from the top subplots to the bottom makes the plot tidier. To do this, a function detecting the peak point in the density point is defined and applied to the `group_by()` by `group_map()`. Then, a new tibble `dataframe_peak_point` is created to store the peak_points corresponding to their species and arranged based on the peak points. In `ggplot()`, the new order of the species names is passed to `fct_relevel()`function for new plotting. 
+```{r}
   
-  print(subset_1[1:10,])
-  
+  #This function 
   find_peak_point<-function(col){
     index=which.max(density(col)$y)
     return (density(col)$x[index])
@@ -44,14 +58,61 @@ In the milestone 2, a ridge plot 1 is done to show the different
   
   dataframe_peak_point<-data.frame(levels(vancouver_trees_top_10_species$species_name),density_peak_points)%>%
                            tibble()%>%
-                           arrange(density_peak_points)
+                           arrange(desc(density_peak_points))
+  print(dataframe_peak_point)
   
-  
-  ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( vancouver_trees_top_10_species$species_name,dataframe_peak_point[[1]])))+ 
+  plot_2<-ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( vancouver_trees_top_10_species$species_name,dataframe_peak_point[[1]])))+ 
     ggridges::geom_density_ridges()
+  print(plot_2)
+```
+###1.1.2 Date Transformation 
+To see how the trees are distributed among the months, we try to use `lubridate` packages to extract the months when the trees are planted. In the data, the column `date_planted` represents the date of trees being planted. We use `month()` to create a new column in tibbles indicating which month the trees are planted.  
+```{r}
+  #select necessary columns for clear demonstration
+
+  vancouver_trees_reduced<-select(vancouver_trees,date_planted,diameter)
+  vancouver_trees_month<-vancouver_trees_reduced %>% 
+    mutate(month_planted=month(date_planted,label=TRUE))%>%
+    drop_na()
+  print(vancouver_trees_month)
+  
+  plot_3<-vancouver_trees_month%>%
+           ggplot(aes(month_planted))+
+           geom_bar()
+  print(plot_3)
+          
 
 ```
+  Investigating the months when trees are planted might be insightful because some months of a year may not be suitable for planing trees. And a bar plot is drawn to show the number of trees being planted in the 12 months. We can see that very few trees are planted from May to September. I guess that the period may not be a good time for planted trees to survive.
 
+## 2. Modelling
+I choose the following research questions and variable of interest.  
+Research Problem: What is effect of root barriers on the growth of trees' diameter?  
+Variable of Interest: root_barrier
+
+One way to test if root barriers has some effect on the trees' growth is to use t-test to test if there is difference between the diameter mean of tree group with and without root barriers. `t.test()` is used to test if the diameter mean of two groups are different. Then, the results like p-value and estimated mean are stored into a tibble by `broom::glance()`.
+```{r}
+  diameter_1<-filter(vancouver_trees,root_barrier=="Y")%>%
+              select(diameter)
+  diameter_2<-filter(vancouver_trees,root_barrier=="N")%>%
+              select(diameter)
+
+  r<-t.test(diameter_1,diameter_2)
+  print(r)
+  result<-broom::glance(r)
+  print(result)
+```
+## 3.Read and write data 
+We save the result by t-test into csv file and rds file under the `output directory`. To test if we store the file successfully, `readRDS()` is used to read the file just stored. 
+```{r}
+
+write_csv(result,here::here("output","t_test_result.csv"))
+
+saveRDS(result,file=here::here("output","t_test_result.rds"))
+d<-readRDS(here::here("output","t_test_result.rds"))
+print(d)
+
+```
 ## Including Plots
 
 You can also embed plots, for example:
