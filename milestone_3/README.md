@@ -1,0 +1,1 @@
+This folder deals with the tasks in the milestone 3. It covers the use of factors and date, the reading and saving of the data and modelling. 
