@@ -161,13 +161,11 @@ species names is passed to `fct_relevel()`function for new plotting.
 
 ``` r
   #use fct_level() to change the level of the factors
-  plot_2<-ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( vancouver_trees_top_10_species$species_name,dataframe_peak_point[[1]])))+ 
-    ggridges::geom_density_ridges()
+  plot_2<-ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( species_name,dataframe_peak_point[[1]])))+ 
+    ggridges::geom_density_ridges()+
+    labs(x="diamter",y="species")
   print(plot_2)
 ```
-
-    ## Warning: Use of `vancouver_trees_top_10_species$species_name` is discouraged.
-    ## Use `species_name` instead.
 
     ## Picking joint bandwidth of 1.05
 
@@ -214,6 +212,7 @@ column in tibbles indicating which month the trees are planted in.
 ```
 
 ![](min_data_analysis_milestone_3_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
 Investigating the months when trees are planted might be insightful
 because some months of a year may not be suitable for planing trees. And
 a bar plot is drawn to show the number of trees being planted in the 12

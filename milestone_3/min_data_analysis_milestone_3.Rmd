@@ -69,8 +69,9 @@ But the order of `species_name` in y-axis does not make the plot very beautiful 
   print(dataframe_peak_point)
   
   #use fct_level() to change the level of the factors
-  plot_2<-ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( vancouver_trees_top_10_species$species_name,dataframe_peak_point[[1]])))+ 
-    ggridges::geom_density_ridges()
+  plot_2<-ggplot(vancouver_trees_top_10_species,aes(x=diameter,y=fct_relevel( species_name,dataframe_peak_point[[1]])))+ 
+    ggridges::geom_density_ridges()+
+    labs(x="diamter",y="species")
   print(plot_2)
 ```
 
@@ -93,6 +94,7 @@ To see how the trees are distributed among the months of their birthdays, we try
           
 
 ```
+  
   Investigating the months when trees are planted might be insightful because some months of a year may not be suitable for planing trees. And a bar plot is drawn to show the number of trees being planted in the 12 months. We can see that very few trees are planted from May to September. I guess that the period may not be a good time for planted trees to survive.
 
 ## 2. Modelling
