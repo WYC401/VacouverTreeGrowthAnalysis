@@ -270,13 +270,16 @@ the results like p-value and estimated mean are stored into a tibble by
 
 ## 3.Read and write data
 
-We save the result by t-test into csv file and rds file under the
-`output directory`. To test if we store the file successfully,
+Before creating the file, we need to make sure the folder desired for
+storage exists. If it is not present in our working directory, we should
+create one. We save the result by t-test into csv file and rds file
+under the `output directory`. To test if we store the file successfully,
 `readRDS()` is used to read the file just stored.
 
 ``` r
+if(!dir.exists(here::here("output")))
+  dir.create(here::here("output"))
 write_csv(result,here::here("output","t_test_result.csv"))
-
 saveRDS(result,file=here::here("output","t_test_result.rds"))
 d<-readRDS(here::here("output","t_test_result.rds"))
 print(d)
